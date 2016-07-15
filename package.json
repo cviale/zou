@@ -1,0 +1,24 @@
+{
+  "name": "zou",
+  "version": "1.0.0",
+  "description": "Bot messenger Zou",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cviale/zou.git"
+  },
+  "author": "wearezou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cviale/zou/issues"
+  },
+  "homepage": "https://github.com/cviale/zou#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "request": "^2.73.0"
+  }
+}
