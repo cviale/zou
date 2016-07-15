@@ -45,6 +45,11 @@ app.post('/webhook/', function (req, res) {
 			sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
 			continue
 		}
+		if (event.message && event.message.text) {
+		    if (!kittenMessage(event.sender.id, event.message.text)) {
+		        sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
+		    }
+		}
 	}
 	res.sendStatus(200)
 })
