@@ -39,7 +39,6 @@ app.post('/webhook/', function (req, res) {
 				continue
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				sendTypingMessage();
 				sendTextMessage(sender, "Hi there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
@@ -58,17 +57,6 @@ app.post('/webhook/', function (req, res) {
 const token = process.env.FB_PAGE_TOKEN
 
 
-function sendTypingMessage(recipientId, typing_on) {
-	let messageData = {
-		recipient: {
-			id: recipientId
-		},
-		sender_action:typing_on
-	};
-	callSendAPI(messageData);
-}
-
-
 function sendTextMessage(recipientId, messageText) {
 	let messageData = {
 		recipient: {
@@ -76,7 +64,8 @@ function sendTextMessage(recipientId, messageText) {
 		},
 		message: {
 			text: messageText
-		}
+		},
+		sender_action:typing_on
 	};
 	callSendAPI(messageData);
 }
