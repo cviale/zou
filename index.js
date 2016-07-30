@@ -57,25 +57,63 @@ app.post('/webhook/', function (req, res) {
 const token = process.env.FB_PAGE_TOKEN
 
 
-function sendTextMessage(sender, text) {
-	let messageData = { text:text }
-	
-	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token:token},
-		method: 'POST',
-		json: {
-			recipient: {id:sender},
-			message: messageData,
-		}
-	}, function(error, response, body) {
-		if (error) {
-			console.log('Error sending messages: ', error)
-		} else if (response.body.error) {
-			console.log('Error: ', response.body.error)
-		}
-	})
+
+function sendTextMessage(recipientId, messageText) {
+  let messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
 }
+function callSendAPI(messageData) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:token},
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      console.log("Successfully sent generic message with id %s to recipient %s", 
+        messageId, recipientId);
+    } else {
+      console.error("Unable to send message.");
+      console.error(response);
+      console.error(error);
+    }
+  });  
+}
+
+
+
+
+// function sendTextMessage(sender, text) {
+// 	let messageData = { text:text }
+	
+// 	request({
+// 		url: 'https://graph.facebook.com/v2.6/me/messages',
+// 		qs: {access_token:token},
+// 		method: 'POST',
+// 		json: {
+// 			recipient: {id:sender},
+// 			message: messageData,
+// 		}
+// 	}, function(error, response, body) {
+// 		if (error) {
+// 			console.log('Error sending messages: ', error)
+// 		} else if (response.body.error) {
+// 			console.log('Error: ', response.body.error)
+// 		}
+// 	})
+// }
 
 function sendGenericMessage(sender) {
 	let messageData = {
