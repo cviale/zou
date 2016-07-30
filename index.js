@@ -39,7 +39,7 @@ app.post('/webhook/', function (req, res) {
 				continue
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				sendTextMessage(sender, "Hi there, let’s get started.")
+				sendTextMessage(sender, "Hi there, let’s get started !")
 			}
 		}
 		if (event.postback) {
