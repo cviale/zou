@@ -63,9 +63,7 @@ function sendTypingMessage(recipientId, typing_on) {
 		recipient: {
 			id: recipientId
 		},
-		message: {
-			sender_action: typing_on
-		}
+		sender_action:typing_on
 	};
 	callSendAPI(messageData);
 }
