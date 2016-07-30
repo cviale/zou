@@ -40,7 +40,7 @@ app.post('/webhook/', function (req, res) {
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
 				sendTextMessage(sender, "Hi there, let’s get started !")
-				sendTextMessage(sender, "Pick an option below to get going")
+				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
 		if (event.postback) {
