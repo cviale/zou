@@ -38,10 +38,9 @@ app.post('/webhook/', function (req, res) {
 				sendGenericMessage(sender)
 				continue
 			} else {
-				sendTypingMessage(sender)
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				// sendTextMessage(sender, "Hi there, let’s get started !")
-				// setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
+				sendTextMessage(sender, "Hi there, let’s get started !")
+				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
 		if (event.postback) {
@@ -110,7 +109,7 @@ function sendGenericMessage(sender) {
 			}
 		}
 	}
-	callSendAPI(messageData);
+	callSendAPI(messageData);c
 }
 
 function callSendAPI(messageData) {
