@@ -57,25 +57,6 @@ app.post('/webhook/', function (req, res) {
 // const token = process.env.PAGE_ACCESS_TOKEN
 const token = process.env.FB_PAGE_TOKEN
 
-function sendTyping(sender) {
-	
-	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token:token},
-		method: 'POST',
-		json: {
-			recipient: {id:sender},
-			sender_action: typing_on,
-		}
-	}, function(error, response, body) {
-		if (error) {
-			console.log('Error sending messages: ', error)
-		} else if (response.body.error) {
-			console.log('Error: ', response.body.error)
-		}
-	})
-}
-
 function sendTextMessage(sender, text) {
 	let messageData = { text:text }
 	
@@ -128,6 +109,26 @@ function sendGenericMessage(sender) {
 			}
 		}
 	}
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
+}
+
+function sendTyping(sender) {
+	let messageData = {"sender_action":"typing_on"}
+
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {access_token:token},
