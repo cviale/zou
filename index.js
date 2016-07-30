@@ -39,12 +39,14 @@ app.post('/webhook/', function (req, res) {
 				continue
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				sendTextMessage(sender, "Hi there, let’s get started !")
+				sendTextMessage(sender, "Hi there, let’s get started !");
+				sendTyping(sender);
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
-		else if (event.postback) {
-			receivedPostback(sender);
+		if (event.postback) {
+			let text = JSON.stringify(event.postback)
+			sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
 			continue
 		}
 	}
@@ -55,29 +57,15 @@ app.post('/webhook/', function (req, res) {
 // const token = process.env.PAGE_ACCESS_TOKEN
 const token = process.env.FB_PAGE_TOKEN
 
-function receivedPostback(event) {
-	var senderID = event.sender.id;
-	var recipientID = event.recipient.id;
-	var timeOfPostback = event.timestamp;
-
-	// The 'payload' param is a developer-defined field which is set in a postback 
-	// button for Structured Messages. 
-	var payload = event.postback.payload;
-
-	console.log("Received postback for user %d and page %d with payload '%s' " + 
-	"at %d", senderID, recipientID, payload, timeOfPostback);
-
-	// When a postback is called, we'll send a message back to the sender to 
-	// let them know it was successful
-	sendTextMessage(senderID, "Postback called");
-
+function sendTyping(sender) {
+	
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {access_token:token},
 		method: 'POST',
 		json: {
 			recipient: {id:sender},
-			message: messageData,
+			sender_action: typing_on,
 		}
 	}, function(error, response, body) {
 		if (error) {
@@ -87,7 +75,6 @@ function receivedPostback(event) {
 		}
 	})
 }
-
 
 function sendTextMessage(sender, text) {
 	let messageData = { text:text }
