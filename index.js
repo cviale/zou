@@ -56,53 +56,25 @@ app.post('/webhook/', function (req, res) {
 // const token = process.env.PAGE_ACCESS_TOKEN
 const token = process.env.FB_PAGE_TOKEN
 
-
-function sendTextMessage(sender, messageText) {
-	let messageData = {
-		recipient: {id:sender},
-		message: {
-			text: messageText
-		},
-	};
-	callSendAPI(messageData);
-}
-function callSendAPI(messageData) {
+function sendTextMessage(sender, text) {
+	let messageData = { text:text }
+	
 	request({
-		uri: 'https://graph.facebook.com/v2.6/me/messages',
+		url: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {access_token:token},
 		method: 'POST',
-		json: messageData
-
-	}, function (error, response, body) {
-	if (error) {
-		console.log('Error sending messages: ', error)
-	} else if (response.body.error) {
-		console.log('Error: ', response.body.error)
-	}
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
 }
-
-
-
-
-// function sendTextMessage(sender, text) {
-// 	let messageData = { text:text }
-	
-// 	request({
-// 		url: 'https://graph.facebook.com/v2.6/me/messages',
-// 		qs: {access_token:token},
-// 		method: 'POST',
-// 		json: {
-// 			recipient: {id:sender},
-// 			message: messageData,
-// 		}
-// 	}, function(error, response, body) {
-// 		if (error) {
-// 			console.log('Error sending messages: ', error)
-// 		} else if (response.body.error) {
-// 			console.log('Error: ', response.body.error)
-// 		}
-// 	})
-// }
 
 function sendGenericMessage(sender) {
 	let messageData = {
