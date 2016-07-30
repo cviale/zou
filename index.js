@@ -65,7 +65,6 @@ function sendTextMessage(recipientId, messageText) {
 		message: {
 			text: messageText
 		},
-		sender_action:typing_on
 	};
 	callSendAPI(messageData);
 }
