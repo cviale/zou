@@ -128,16 +128,15 @@ function sendGenericMessage(sender) {
 }
 
 function sendTypingMessage(sender) {
-	let messageData = {
-		"sender_action":"typing_on"
-	}
+	let messageData = { sender_action:typing_on }
+	
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {access_token:token},
 		method: 'POST',
 		json: {
 			recipient: {id:sender},
-			message: messageData,
+			sender_action: messageData,
 		}
 	}, function(error, response, body) {
 		if (error) {
