@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
-		if (event.postback) {
+		else if (event.postback) {
 			let text = JSON.stringify(event.postback)
 			sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
 			receivedPostback(messagingEvent);  
@@ -72,6 +72,22 @@ function receivedPostback(event) {
 	// When a postback is called, we'll send a message back to the sender to 
 	// let them know it was successful
 	sendTextMessage(senderID, "Postback called");
+
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
 }
 
 
