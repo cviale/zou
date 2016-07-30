@@ -38,7 +38,7 @@ app.post('/webhook/', function (req, res) {
 				sendGenericMessage(sender)
 				continue
 			}
-			sendTextMessage(sender, "Hi there, let’s get started. ! Text received, echo: " + text.substring(0, 200))
+			sendTextMessage(sender, "Hello u ! Text received, echo: " + text.substring(0, 200))
 		}
 		if (event.postback) {
 			let text = JSON.stringify(event.postback)
@@ -48,7 +48,6 @@ app.post('/webhook/', function (req, res) {
 	}
 	res.sendStatus(200)
 })
-
 
 // recommended to inject access tokens as environmental variables, e.g.
 // const token = process.env.PAGE_ACCESS_TOKEN
