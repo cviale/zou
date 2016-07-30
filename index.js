@@ -40,7 +40,7 @@ app.post('/webhook/', function (req, res) {
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
 				sendTextMessage(sender, "Hi there, let’s get started !");
-				sendTyping(sender);
+				sendTyping(sender, sender_action);
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
@@ -126,7 +126,7 @@ function sendGenericMessage(sender) {
 	})
 }
 
-function sendTyping(sender) {
+function sendTyping(sender, sender_action) {
 	let messageData = {"sender_action":"typing_on"}
 
 	request({
