@@ -136,7 +136,7 @@ function sendTypingMessage(sender) {
 		method: 'POST',
 		json: {
 			recipient: {id:sender},
-			sender_action: messageData,
+			sender_action: typing_on,
 		}
 	}, function(error, response, body) {
 		if (error) {
