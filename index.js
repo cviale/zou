@@ -39,6 +39,7 @@ app.post('/webhook/', function (req, res) {
 				continue
 			} else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
+				sendTypingMessage();
 				sendTextMessage(sender, "Hi there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
@@ -57,39 +58,43 @@ app.post('/webhook/', function (req, res) {
 const token = process.env.FB_PAGE_TOKEN
 
 
+function sendTypingMessage(recipientId, typing_on) {
+	let messageData = {
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			sender_action: typing_on
+		}
+	};
+	callSendAPI(messageData);
+}
+
 
 function sendTextMessage(recipientId, messageText) {
-  let messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText
-    }
-  };
-
-  callSendAPI(messageData);
+	let messageData = {
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			text: messageText
+		}
+	};
+	callSendAPI(messageData);
 }
 function callSendAPI(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:token},
-    method: 'POST',
-    json: messageData
+	request({
+		uri: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: messageData
 
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s", 
-        messageId, recipientId);
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
-    }
-  });  
+	}, function (error, response, body) {
+	if (error) {
+		console.log('Error sending messages: ', error)
+	} else if (response.body.error) {
+		console.log('Error: ', response.body.error)
+	}
 }
 
 
