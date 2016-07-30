@@ -38,9 +38,10 @@ app.post('/webhook/', function (req, res) {
 				sendGenericMessage(sender)
 				continue
 			} else {
+				sendTypingMessage(sender)
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				sendTextMessage(sender, "Hi there, let’s get started !")
-				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
+				// sendTextMessage(sender, "Hi there, let’s get started !")
+				// setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
 		if (event.postback) {
@@ -108,6 +109,27 @@ function sendGenericMessage(sender) {
 				}]
 			}
 		}
+	}
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
+}
+
+function sendTypingMessage(sender) {
+	let messageData = {
+		"sender_action":"typing_on"
 	}
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
