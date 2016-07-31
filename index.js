@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
 			}
 			else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
-				sendTextMessage2(recipientId, "Hello there, let’s get started !")
+				sendTextMessage2(sender, "Hello there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
 		}
@@ -60,11 +60,9 @@ app.post('/webhook/', function (req, res) {
 // const token = process.env.PAGE_ACCESS_TOKEN
 const token = process.env.FB_PAGE_TOKEN
 
-function sendTextMessage2(recipientId, messageText) {
+function sendTextMessage2(sender, messageText) {
   var messageData = {
-    recipient: {
-      id: recipientId
-    },
+    recipient: {id:sender},
     message: {
       text: messageText
     }
