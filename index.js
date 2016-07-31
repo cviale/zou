@@ -37,7 +37,11 @@ app.post('/webhook/', function (req, res) {
 			if (text === 'Generic') {
 				sendGenericMessage(sender)
 				continue
-			} else {
+			} else if (text === 'Button') {
+				sendButtonMessage(sender)
+				continue
+			}
+			else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
 				sendTextMessage(sender, "Hi there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
@@ -45,7 +49,7 @@ app.post('/webhook/', function (req, res) {
 		}
 		if (event.postback) {
 			let text = JSON.stringify(event.postback)
-			sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
+			sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
 			continue
 		}
 	}
@@ -107,6 +111,45 @@ function sendGenericMessage(sender) {
 				}]
 			}
 		}
+	}
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
+}
+
+function sendButtonMessage(sender) {
+	let messageData = {
+		"attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"What do you want to do next?",
+        "buttons":[
+          {
+            "type":"web_url",
+            "url":"https://petersapparel.parseapp.com",
+            "title":"Show Website"
+          },
+          {
+            "type":"postback",
+            "title":"Start Chatting",
+            "payload":"USER_DEFINED_PAYLOAD"
+          }
+        ]
+      }
+    }
 	}
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
