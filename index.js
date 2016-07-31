@@ -90,31 +90,6 @@ function sendTextMessage2(sender, messageText) {
 	callSendAPI(messageData);
 }
 
-function sendGreetingMessage(text) {
-	let messageData = { text:Welcome to My Company }
-	
-	request({
-		url: 'https://graph.facebook.com/v2.6/me/thread_settings',
-		qs: {access_token:token},
-		method: 'POST',
-		json: {
-			setting_type: greeting,
-			greeting: messageData,
-		}
-	}, function(error, response, body) {
-		if (error) {
-			console.log('Error sending messages: ', error)
-		} else if (response.body.error) {
-			console.log('Error: ', response.body.error)
-		}
-	})
-}
-
-
-
-
-
-
 function sendTextMessage(sender, text) {
 	let messageData = { text:text }
 	
