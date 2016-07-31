@@ -32,6 +32,9 @@ app.post('/webhook/', function (req, res) {
 	for (let i = 0; i < messaging_events.length; i++) {
 		let event = req.body.entry[0].messaging[i]
 		let sender = event.sender.id
+
+		sendGreetingMessage(text);
+
 		if (event.message && event.message.text) {
 			let text = event.message.text
 			if (text === 'Generic') {
@@ -88,6 +91,31 @@ function sendTextMessage2(sender, messageText) {
 	};
 	callSendAPI(messageData);
 }
+
+function sendGreetingMessage(text) {
+	let messageData = { text:Welcome to My Company }
+	
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/thread_settings',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			setting_type: greeting,
+			greeting: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+			console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error)
+		}
+	})
+}
+
+
+
+
+
 
 function sendTextMessage(sender, text) {
 	let messageData = { text:text }
