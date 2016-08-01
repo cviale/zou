@@ -46,6 +46,7 @@ app.post('/webhook/', function (req, res) {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
 				sendTextMessage2(sender, "Hello there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
+				continue
 			}
 		}
 		if (event.postback) {
@@ -60,6 +61,44 @@ app.post('/webhook/', function (req, res) {
 // recommended to inject access tokens as environmental variables, e.g.
 // const token = process.env.PAGE_ACCESS_TOKEN
 const token = process.env.FB_PAGE_TOKEN
+
+const threadSettings = ({ type, state, text, cta }, pageId, pageAccessToken) => {
+    const requestOptions = {
+        uri: 'https://graph.facebook.com/v2.6/me/thread_settings?access_token',
+        qs: {access_token:token},
+        method: 'POST',
+        json: true
+    };
+    if (type === 'greeting') {
+        return request({
+            ...requestOptions,
+            body: {
+                setting_type: type,
+                greeting: {
+                    text:Welcome to My Company
+                }
+            }
+        });
+    }
+    return request({
+        ...requestOptions,
+        body: {
+            thread_state: state,
+            setting_type: type,
+            call_to_actions: cta
+        }
+    });
+};
+
+
+
+
+
+
+
+
+
+
 
 function callSendAPI(messageData) {
 	request({
