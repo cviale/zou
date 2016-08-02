@@ -35,11 +35,16 @@ app.post('/webhook/', function (req, res) {
 
 		if (event.message && event.message.text) {
 			let text = event.message.text
+
 			if (text === 'Generic') {
 				sendGenericMessage(sender)
 				continue
 			} else if (text === 'Button') {
 				sendButtonMessage(sender)
+				continue
+			} 
+			else if (text === 'typing') {
+				sendTypingOn(sender);
 				continue
 			}
 			else {
@@ -108,6 +113,25 @@ function sendTextMessage(sender, text) {
 			console.log('Error: ', response.body.error)
 		}
 	})
+}
+
+
+
+/*
+* Turn typing indicator on
+*
+*/
+function sendTypingOn(recipientId) {
+  console.log("Turning typing indicator on");
+
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    sender_action: "typing_on"
+  };
+
+  callSendAPI(messageData);
 }
 
 function sendGenericMessage(sender) {
