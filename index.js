@@ -49,6 +49,7 @@ app.post('/webhook/', function (req, res) {
 			}
 			else {
 				// sendTextMessage(sender, "Hey u ! Text received, echo: " + text.substring(0, 200))
+				sendTypingOn(sender);
 				sendTextMessage2(sender, "Hello there, let’s get started !")
 				setTimeout(function(){ sendTextMessage(sender, "Pick an option below to get going") }, 1000);
 			}
